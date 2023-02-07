@@ -11,6 +11,8 @@ export class CommerçantEntity {
   mdp: string;
   @Column()
   numTel: number;
-  @OneToMany((type) => ProduitEntity, (produit) => produit.commerçant)
+  @OneToMany((type) => ProduitEntity, (produit) => produit.commerçant, {
+    cascade: true
+  })
   produits: ProduitEntity[];
 }
