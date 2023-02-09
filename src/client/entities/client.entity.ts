@@ -13,7 +13,10 @@ export class ClientEntity {
   @PrimaryGeneratedColumn()
   client_id: number;
   @Column()
-  email: string;
+  @Column()
+  name: string;
+  @Column()
+  firstname: string;
   @Column()
   mdp: string;
   @Column()
