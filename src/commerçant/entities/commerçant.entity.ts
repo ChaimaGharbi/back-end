@@ -17,8 +17,6 @@ export class CommerçantEntity {
   address: string;
   @Column()
   numTel: number;
-  @OneToMany((type) => ProduitEntity, (produit) => produit.commerçant, {
-    cascade: true,
-  })
+  @OneToMany((type) => ProduitEntity, (produit) => produit.commerçant,)
   produits: ProduitEntity[];
 }
