@@ -1,29 +1,25 @@
 import {
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsPhoneNumber,
   IsString,
   IsStrongPassword,
 } from 'class-validator';
 
-export class AddCommerçantDto {
+export class UpdateCommercantDto {
   @IsString()
-  @IsNotEmpty({
-    message: 'Ce champs est obligatoire!',
-  })
+  @IsOptional()
   name: string;
   @IsNotEmpty()
-  @IsString()
+  @IsOptional()
   firstname: string;
-  @IsNotEmpty()
-  @IsEmail()
-  email: string;
-  @IsNotEmpty()
+  @IsOptional()
   @IsStrongPassword()
   mdp: string;
-  @IsNotEmpty()
+  @IsOptional()
   address: string;
   @IsPhoneNumber()
-  @IsNotEmpty()
+  @IsOptional()
   numTel: number;
 }
