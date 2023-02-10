@@ -20,7 +20,7 @@ export class ClientController {
         return sql.getMany();
     }
     @Put('client/favourites/:id/:produit')
-    async editProduit(
+    async editListOfFavourites(
         @Param('id', ParseIntPipe) id: number,
         @Param('produit', ParseIntPipe) produit: number
     ) {
