@@ -22,18 +22,6 @@ export class CommerçantController {
 
     return sql.getMany();
   }
-  @Delete('/:commerçant_id/deleteCommande/:produit_id/:client_id')
-  async deleteProduitFromCommande(
-    @Param('commerçant_id', ParseIntPipe) commerçant_id: number,
-    @Param('produit_id', ParseIntPipe) produit_id: number,
-    @Param('client_id', ParseIntPipe) client_id: number,
-  ) {
-    return await this.commercantService.deleteProduitFromCommandes(
-      commerçant_id,
-      produit_id,
-      client_id,
-    );
-  }
 
   @Get()
   async getAllComs(): Promise<CommerçantEntity[]> {
@@ -49,9 +37,26 @@ export class CommerçantController {
   }
   @Put('edit/:id')
   async updateCom(
-    @Param('id', ParseIntPipe) id,
+    @Param('id', ParseIntPipe) id: number,
     @Body() newCom: UpdateCommercantDto,
   ): Promise<CommerçantEntity> {
     return await this.commercantService.updateCommercant(id, newCom);
   }
+
+
+  @Put("/:produit_id/:client_id")
+  async hh(
+
+    @Param('produit_id', ParseIntPipe) produit_id: number,
+    @Param('client_id', ParseIntPipe) client_id: number,
+  ){
+    
+    return await this.commercantService.deleteProduitFromCommandes(
+      client_id,
+      produit_id,
+    );
+  }
+
+  
+
 }

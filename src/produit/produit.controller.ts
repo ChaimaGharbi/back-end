@@ -8,7 +8,13 @@ import { updateProduitDto } from './dto/update-produit.dto';
 export class ProduitController {
   constructor(private produitService: ProduitService) {}
 
+
+  @Get()
+  async gettt(){
+    return await this.produitService.gett();
+  }
   @Post('add/:id')
+
   async addProduit(
     @Body() newproduit: addProduitDto,
     @Param('id', ParseIntPipe) id: number,

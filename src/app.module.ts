@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClientModule } from './client/client.module';
 import { CommerçantModule } from './commerçant/commerçant.module';
 import { ProduitModule } from './produit/produit.module';
+import { CommandesModule } from './commandes/commandes.module';
 import * as dotenv from 'dotenv';
 import * as process from "process";
 
@@ -25,6 +26,7 @@ dotenv.config();
     ClientModule,
     CommerçantModule,
     ProduitModule,
+    CommandesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

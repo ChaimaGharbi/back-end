@@ -19,6 +19,10 @@ export class ProduitService {
     private commercantService: CommerçantService,
   ) {}
 
+  async gett(){
+    return await this.produitRepository.find();
+  }
+
   async addProduit(id: number, produit: addProduitDto): Promise<ProduitEntity> {
     const Commercant = await this.commercantService.getCommercantById(id);
 

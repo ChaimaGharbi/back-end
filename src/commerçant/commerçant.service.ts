@@ -6,6 +6,8 @@ import { CommerçantEntity } from './entities/commerçant.entity';
 import { UpdateCommercantDto } from './dto/update-commerçant.dto';
 import { ClientEntity } from "../client/entities/client.entity";
 import { ProduitEntity } from "../produit/entities/produit.entity";
+import { CommandesEntity } from 'src/commandes/entities/commandes.entity';
+import { stat } from 'fs';
 
 @Injectable()
 export class CommerçantService {
@@ -16,7 +18,11 @@ export class CommerçantService {
     private clientRepository: Repository<ClientEntity>,
     @InjectRepository(ProduitEntity)
     private produitRepository: Repository<ProduitEntity>,
+    @InjectRepository(CommandesEntity)
+    private commandesRepository :Repository<CommandesEntity>
   ) {}
+
+
   async getCommercant(): Promise<CommerçantEntity[]> {
     return await this.commercantRepository.find();
   }
@@ -42,28 +48,23 @@ export class CommerçantService {
   }
 
   async deleteProduitFromCommandes(
-    commerçant_id: number,
     client_id: number,
     produit_id: number,
-  ): Promise<void> {
-    console.log(client_id);
-    const client = await this.clientRepository.findOne({
-      where: { client_id: client_id },
+  ): Promise<CommandesEntity> {
+    
+    const commande = await this.commandesRepository.findOne({where:{client_id,produit_id}});
+    
+    if (!commande){
+      throw new NotFoundException('client ou produit incorect');
+    }
+    
+    const statu='rejeter';
+
+    const commanderejeter = await this.commandesRepository.preload({
+      ...commande,
+      status:statu
     });
-    const produit = await this.produitRepository.findOne({
-      where: { produit_id: produit_id },
-    });
-    if (!client || !produit) {
-      throw new Error('Client or product not found');
-    }
-    if (produit.commerçant.commerçant_id !== commerçant_id) {
-      throw new Error('You can only delete products that belong to you!');
-    }
-    const index = client.commandes.indexOf(produit);
-    if (index === -1) {
-      throw new Error('this product is not ordered by this client!');
-    }
-    client.commandes.splice(index, 1);
-    await this.clientRepository.save(client);
+    return await this.produitRepository.save(commanderejeter);
+    
   }
 }
