@@ -15,6 +15,10 @@ export class ClientEntity {
   @Column()
   email: string;
   @Column()
+  name: string;
+  @Column()
+  firstname: string;
+  @Column()
   mdp: string;
   @Column()
   adresse: string;
