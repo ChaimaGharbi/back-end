@@ -62,7 +62,6 @@ export class ProduitService {
     }
 
 
-
     async getProduitcommandee(){
         const sql = this.produitRepository.createQueryBuilder("produit");
         sql.innerJoin("commandes","c","c.produit_id=produit.produit_id")
