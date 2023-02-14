@@ -1,17 +1,11 @@
-import {
-  Injectable,
-  NotFoundException,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommerçantService } from 'src/commerçant/commerçant.service';
-import { Not, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { addProduitDto } from './dto/add-produit.dto';
 import { updateProduitDto } from './dto/update-produit.dto';
 import { ProduitEntity } from './entities/produit.entity';
 import { ClientService } from 'src/client/client.service';
-
 
 @Injectable()
 export class ProduitService {
@@ -19,10 +13,10 @@ export class ProduitService {
     @InjectRepository(ProduitEntity)
     private produitRepository: Repository<ProduitEntity>,
     private commercantService: CommerçantService,
-    private clientService :ClientService
+    private clientService: ClientService,
   ) {}
 
-  async gett(){
+  async gett() {
     return await this.produitRepository.find();
   }
 
@@ -70,26 +64,26 @@ export class ProduitService {
     return this.produitRepository.save(produit);
   }
 
+  async getProduitcommandee() {
+    const sql = this.produitRepository.createQueryBuilder('produit');
+    sql
+      .innerJoin('commandes', 'c', 'c.produit_id=produit.produit_id')
+      .innerJoin('client', 'cl', 'cl.client_id=c.client_id');
+    return sql;
+  }
+  async consultCommandeClient(id: number) {
+    const client = await this.clientService.getClientById(id);
 
-    async getProduitcommandee(){
-        const sql = this.produitRepository.createQueryBuilder("produit");
-        sql.innerJoin("commandes","c","c.produit_id=produit.produit_id")
-        .innerJoin("client","cl","cl.client_id=c.client_id")
-        return sql;
+    if (!client) {
+      throw new NotFoundException('client not found');
     }
-    async consultCommandeClient(id: number) {
-        const client = await this.clientService.getClientById(id);
-        
-        if (!client){ 
-            throw new NotFoundException("client not found");
-        }
-        const qb = this.produitRepository.createQueryBuilder("produit");
-        qb.innerJoin("commandes", "c", "c.produit_id=produit.produit_id")
-        .where(`c.client_id = ${id}`);
-        return qb
-
-    }
-    async getProductById(id: number): Promise<ProduitEntity> {
-        return await this.produitRepository.findOne({ where: { produit_id: id } });
-    }
+    const qb = this.produitRepository.createQueryBuilder('produit');
+    qb.innerJoin('commandes', 'c', 'c.produit_id=produit.produit_id').where(
+      `c.client_id = ${id}`,
+    );
+    return qb;
+  }
+  async getProductById(id: number): Promise<ProduitEntity> {
+    return await this.produitRepository.findOne({ where: { produit_id: id } });
+  }
 }

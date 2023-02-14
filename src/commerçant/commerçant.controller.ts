@@ -1,6 +1,14 @@
-import { Controller, Query } from "@nestjs/common";
+import { Controller, Query } from '@nestjs/common';
 import { CommerçantService } from './commerçant.service';
-import { Body, Get, Post, Put, Param, Delete, Patch } from '@nestjs/common/decorators';
+import {
+  Body,
+  Get,
+  Post,
+  Put,
+  Param,
+  Delete,
+  Patch,
+} from '@nestjs/common/decorators';
 import { ParseIntPipe } from '@nestjs/common/pipes';
 import { ProduitService } from 'src/produit/produit.service';
 import { CommerçantEntity } from './entities/commerçant.entity';
@@ -14,8 +22,9 @@ export class CommerçantController {
     private commercantService: CommerçantService,
   ) {}
 
-  @Get('/:id/commandes')  /** */
-  async getcommandes(@Param('id', ParseIntPipe) id: number) {
+  @Get('/:id/commandes') /** */ async getcommandes(
+    @Param('id', ParseIntPipe) id: number,
+  ) {
     const sql = await this.produitService.getProduitcommandee();
 
     sql.where(`commerçantCommerçantId = ${id}`);
@@ -23,40 +32,42 @@ export class CommerçantController {
     return sql.getMany();
   }
 
-  @Get() /** */
-  async getAllComs(): Promise<CommerçantEntity[]> {
+  @Get() /** */ async getAllComs(): Promise<CommerçantEntity[]> {
     return await this.commercantService.getCommercant();
   }
-  @Get('/:id')  /** */
-  async getComById(@Param('id', ParseIntPipe) id): Promise<CommerçantEntity> {
+  @Get('/:id') /** */ async getComById(
+    @Param('id', ParseIntPipe) id,
+  ): Promise<CommerçantEntity> {
     return await this.commercantService.getCommercantById(id);
   }
-  @Post()  /** */
-  async addCom(@Body() addComDto: AddCommerçantDto): Promise<CommerçantEntity> {
+  @Post() /** */ async addCom(
+    @Body() addComDto: AddCommerçantDto,
+  ): Promise<CommerçantEntity> {
     return await this.commercantService.addCommercant(addComDto);
   }
-  @Put('edit/:id')  /** */
-  async updateCom(
+  @Put('edit/:id') /** */ async updateCom(
     @Param('id', ParseIntPipe) id: number,
     @Body() newCom: UpdateCommercantDto,
   ): Promise<CommerçantEntity> {
     return await this.commercantService.updateCommercant(id, newCom);
   }
 
-
-  @Patch("/:produit_id/:client_id") /** */
-  async hh(
-
+  @Patch('delete/:produit_id/:client_id') /** */ async deleteCommande(
     @Param('produit_id', ParseIntPipe) produit_id: number,
     @Param('client_id', ParseIntPipe) client_id: number,
-  ){
-    
+  ) {
     return await this.commercantService.deleteProduitFromCommandes(
       client_id,
       produit_id,
     );
   }
-
-  
-
+  @Patch('accepte/:produit_id/:client_id') /** */ async accepteCommande(
+    @Param('produit_id', ParseIntPipe) produit_id: number,
+    @Param('client_id', ParseIntPipe) client_id: number,
+  ) {
+    return await this.commercantService.accepterCommandes(
+      client_id,
+      produit_id,
+    );
+  }
 }

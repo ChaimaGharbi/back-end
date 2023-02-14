@@ -4,8 +4,8 @@ import { Repository } from 'typeorm';
 import { AddCommerçantDto } from './dto/add-commerçant.dto';
 import { CommerçantEntity } from './entities/commerçant.entity';
 import { UpdateCommercantDto } from './dto/update-commerçant.dto';
-import { ClientEntity } from "../client/entities/client.entity";
-import { ProduitEntity } from "../produit/entities/produit.entity";
+import { ClientEntity } from '../client/entities/client.entity';
+import { ProduitEntity } from '../produit/entities/produit.entity';
 import { CommandesEntity } from 'src/commandes/entities/commandes.entity';
 import { stat } from 'fs';
 
@@ -19,9 +19,8 @@ export class CommerçantService {
     @InjectRepository(ProduitEntity)
     private produitRepository: Repository<ProduitEntity>,
     @InjectRepository(CommandesEntity)
-    private commandesRepository :Repository<CommandesEntity>
+    private commandesRepository: Repository<CommandesEntity>,
   ) {}
-
 
   async getCommercant(): Promise<CommerçantEntity[]> {
     return await this.commercantRepository.find();
@@ -51,22 +50,43 @@ export class CommerçantService {
     client_id: number,
     produit_id: number,
   ): Promise<CommandesEntity> {
-    
-    const commande = await this.commandesRepository.findOne({where:{client_id,produit_id}});
-    
-    if (!commande){
+    const commande = await this.commandesRepository.findOne({
+      where: { client_id, produit_id },
+    });
+
+    if (!commande) {
       throw new NotFoundException('client ou produit incorect');
     }
-    
-    const statu='rejeter';
+
+    const statu = 'rejetée';
 
     const commanderejeter = await this.commandesRepository.preload({
       ...commande,
-      status:statu
+      status: statu,
     });
     console.log(commanderejeter);
-    
+    return await this.commandesRepository.save(commanderejeter);
+  }
+  async accepterCommandes(
+    client_id: number,
+    produit_id: number,
+  ): Promise<CommandesEntity> {
+    const commande = await this.commandesRepository.findOne({
+      where: { client_id, produit_id },
+    });
+
+    if (!commande) {
+      throw new NotFoundException('client ou produit incorect');
+    }
+
+    const statu = 'accepté';
+
+    const commanderejeter = await this.commandesRepository.preload({
+      ...commande,
+      status: statu,
+    });
+    console.log(commanderejeter);
+
     return await this.produitRepository.save(commanderejeter);
-    
   }
 }
