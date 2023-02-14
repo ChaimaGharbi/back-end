@@ -1,23 +1,29 @@
-import { IsEmail, IsNotEmpty ,IsString ,IsOptional,IsNumber, isNotEmpty } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  IsOptional,
+  IsNumber,
+} from 'class-validator';
 import { ProduitEntity } from 'src/produit/entities/produit.entity';
 
 export class UpdateClientDto {
-    @IsEmail()
-    @IsNotEmpty()
-    email:string ;
- 
-    @IsString()
-    @IsNotEmpty()
-    mdp:string ;
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
 
-    @IsOptional()
-    @IsString()
-    adresse: string;
+  @IsString()
+  @IsNotEmpty()
+  mdp: string;
 
-    @IsOptional()
-    @IsNumber()
-    numTel: number;
+  @IsOptional()
+  @IsString()
+  adresse: string;
 
-    @IsOptional()
-    commandes: ProduitEntity[];
+  @IsOptional()
+  @IsNumber()
+  numTel: number;
+
+  @IsOptional()
+  commandes: ProduitEntity[];
 }
