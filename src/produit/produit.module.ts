@@ -12,6 +12,6 @@ import { CommerçantService } from 'src/commerçant/commerçant.service';
 @Module({
   imports: [TypeOrmModule.forFeature([ProduitEntity,CommerçantEntity, ClientEntity, CommandesEntity])],
   controllers: [ProduitController],
-  providers: [ProduitService,CommerçantService,ClientService,ClientService],
+  providers: [ProduitService,CommerçantService,ClientService],
 })
 export class ProduitModule { }

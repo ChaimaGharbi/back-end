@@ -8,7 +8,8 @@ import { ParseIntPipe } from '@nestjs/common/pipes';
 export class ClientController {
     constructor(
         private produitService: ProduitService,
-        private clientService: ClientService
+        private clientService: ClientService,
+        
     ) { }
 
 
@@ -22,8 +23,10 @@ export class ClientController {
     @Put('client/favourites/:id/:produit')
     async editListOfFavourites(
         @Param('id', ParseIntPipe) id: number,
-        @Param('produit', ParseIntPipe) produit: number
+        @Param('produit', ParseIntPipe) produitid: number
     ) {
+        
+        const produit = await this.produitService.getProductById(produitid)
         return await this.clientService.addProductToFavourites(id, produit);
     }
 }

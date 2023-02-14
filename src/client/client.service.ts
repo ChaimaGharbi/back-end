@@ -3,6 +3,7 @@ import { ClientEntity } from './entities/client.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProduitService } from 'src/produit/produit.service';
+import { ProduitEntity } from 'src/produit/entities/produit.entity';
 
 
 @Injectable()
@@ -11,13 +12,10 @@ export class ClientService {
 
         @InjectRepository(ClientEntity)
         private clientRepository: Repository<ClientEntity>,
-        private produitService: ProduitService
 
     ) { }
-    async addProductToFavourites(id: number, produitId: number): Promise<void> {
+    async addProductToFavourites(id: number, produit: ProduitEntity): Promise<void> {
         const client = await this.getClientById(id);
-        const produit = await this.produitService.getProductById(produitId)
-
         if (!client) {
             throw new NotFoundException("client not found");
         }
