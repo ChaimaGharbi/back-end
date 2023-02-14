@@ -8,12 +8,11 @@ import { ClientEntity } from "../client/entities/client.entity";
 import { ClientService } from "../client/client.service";
 import { CommandesEntity } from 'src/commandes/entities/commandes.entity';
 import { CommerçantService } from 'src/commerçant/commerçant.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProduitEntity } from './entities/produit.entity';
 import { CommandesModule } from 'src/commandes/commandes.module';
+import { ClientModule } from 'src/client/client.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProduitEntity,CommerçantEntity, ClientEntity, CommandesEntity]),  , ClientModule , CommandesModule ],
+  imports: [TypeOrmModule.forFeature([ProduitEntity,CommerçantEntity, ClientEntity, CommandesEntity]),ClientModule , CommandesModule ],
   controllers: [ProduitController],
   providers: [ProduitService,CommerçantService,ClientService],
 })

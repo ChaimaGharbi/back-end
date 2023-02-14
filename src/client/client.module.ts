@@ -8,10 +8,11 @@ import { ClientEntity } from './entities/client.entity';
 import { CommerçantService } from 'src/commerçant/commerçant.service';
 import { CommerçantEntity } from 'src/commerçant/entities/commerçant.entity';
 import { CommandesEntity } from 'src/commandes/entities/commandes.entity';
+import { CommandesService } from 'src/commandes/commandes.service';
 
 @Module({
   imports:[TypeOrmModule.forFeature([ClientEntity,ProduitEntity,CommerçantEntity,CommandesEntity])],
   controllers: [ClientController],
-  providers: [ClientService,ProduitService,CommerçantService]
+  providers: [ClientService,ProduitService,CommerçantService, CommandesService]
 })
 export class ClientModule {}

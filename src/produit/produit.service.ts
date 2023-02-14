@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProduitEntity } from './entities/produit.entity';
 import { ClientService } from 'src/client/client.service';
-import { CommandesService } from 'src/commandes/commandes.service';
+import { CommandesService } from '../commandes/commandes.service';
 @Injectable()
 export class ProduitService {
   constructor(

@@ -1,9 +1,7 @@
-import { Controller, Get, Param, Put } from '@nestjs/common';
-import { Body, Param, Get, Patch, Post } from '@nestjs/common/decorators';
-import { ClientService } from './client.service';
+import { Controller, Get, Param, Put, Patch, Body } from '@nestjs/common';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { ClientEntity } from './entities/client.entity';
-import { ParseIntPipe } from '@nestjs/common/pipes/parse-int.pipe';import { ProduitService } from 'src/produit/produit.service';
+import { ProduitService } from 'src/produit/produit.service';
 import { ClientService } from './client.service';
 import { ParseIntPipe } from '@nestjs/common/pipes';
 
