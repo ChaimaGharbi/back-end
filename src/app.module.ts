@@ -7,7 +7,7 @@ import { CommerçantModule } from './commerçant/commerçant.module';
 import { ProduitModule } from './produit/produit.module';
 import { CommandesModule } from './commandes/commandes.module';
 import * as dotenv from 'dotenv';
-import * as process from "process";
+import * as process from 'process';
 
 dotenv.config();
 

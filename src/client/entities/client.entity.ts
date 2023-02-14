@@ -21,6 +21,8 @@ export class ClientEntity {
   @Column()
   mdp: string;
   @Column()
+  salt: string;
+  @Column()
   adresse: string;
   @Column()
   numTel: number;
@@ -40,4 +42,5 @@ export class ClientEntity {
   })
   @Optional()
   favoris: ProduitEntity[];
+  
 }

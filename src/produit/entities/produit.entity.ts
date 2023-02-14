@@ -13,8 +13,11 @@ export class ProduitEntity {
   description: string;
   @Column()
   prix: number;
-  @ManyToOne((type) => CommerçantEntity, (commerçant) => commerçant.produits, {
+  @Column()
+  stock: number;
+  @ManyToOne((type) => CommerçantEntity, (commerçant) => commerçant.produits ,{
     cascade: true,
   })
   commerçant: CommerçantEntity;
+  
 }

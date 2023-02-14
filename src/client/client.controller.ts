@@ -1,5 +1,9 @@
 import { Controller, Get, Param, Put } from '@nestjs/common';
-import { ProduitService } from 'src/produit/produit.service';
+import { Body, Param, Get, Patch, Post } from '@nestjs/common/decorators';
+import { ClientService } from './client.service';
+import { UpdateClientDto } from './dto/update-client.dto';
+import { ClientEntity } from './entities/client.entity';
+import { ParseIntPipe } from '@nestjs/common/pipes/parse-int.pipe';import { ProduitService } from 'src/produit/produit.service';
 import { ClientService } from './client.service';
 import { ParseIntPipe } from '@nestjs/common/pipes';
 
@@ -10,6 +14,15 @@ export class ClientController {
     private clientService: ClientService,
   ) {}
 
+  @Patch('update/:id')
+  async updateClient(
+    @Param('id', ParseIntPipe) id_Client: number,
+    @Body() UpdateClientDto: UpdateClientDto,
+  ): Promise<ClientEntity> {
+    return await this.clientService.update(id_Client, UpdateClientDto);
+  }
+
+ 
   @Get('commandes/:id') /** les commandes pour le client id */
   async getCommandes(@Param('id', ParseIntPipe) id: number) {
     const sql = await this.produitService.consultCommandeClient(id);

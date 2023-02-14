@@ -17,3 +17,6 @@ export class CommandesController {
         return await this.commandesRepository.find();
     }
 }
+
+@Controller('commandes')
+export class CommandesController {}

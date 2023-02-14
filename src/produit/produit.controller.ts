@@ -1,12 +1,24 @@
 import { Controller, ParseIntPipe } from '@nestjs/common';
+import { Body, Param, Get, Patch, Post, Delete, Put } from '@nestjs/common/decorators';
+import { ProduitEntity } from './entities/produit.entity';
 import { ProduitService } from './produit.service';
-import { Body, Get, Post, Put, Param, Delete } from '@nestjs/common/decorators';
 import { addProduitDto } from './dto/add-produit.dto';
 import { updateProduitDto } from './dto/update-produit.dto';
 
 @Controller('produit')
 export class ProduitController {
   constructor(private produitService: ProduitService) {}
+  @Get()
+  async getAllProduits(): Promise<ProduitEntity[]> {
+    return await this.produitService.getProduits();
+  }
+  @Patch('command/:idClient/:idProduit')
+  async CommanderProduit(
+    @Param('idClient', ParseIntPipe) idClient: number,
+    @Param('idProduit', ParseIntPipe) idProduit: number,
+  ): Promise<ProduitEntity> {
+    return await this.produitService.CommandProduit(idClient, idProduit);
+  }
 
   @Get() /** */ async gettt() {
     return await this.produitService.gett();

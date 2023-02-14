@@ -3,6 +3,7 @@ import { ClientEntity } from './entities/client.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProduitEntity } from 'src/produit/entities/produit.entity';
+import { UpdateClientDto } from './dto/update-client.dto';
 
 @Injectable()
 export class ClientService {
@@ -12,6 +13,21 @@ export class ClientService {
     @InjectRepository(ProduitEntity)
     private produit: Repository<ProduitEntity>,
   ) {}
+  async find(id: number): Promise<ClientEntity> {
+    return await this.clientRepository.findOneBy({ client_id: id });
+  }
+  async update(
+    client_id: number,
+    client: UpdateClientDto,
+  ): Promise<ClientEntity> {
+    const newclient = await this.clientRepository.preload({
+      client_id,
+      ...client,
+    });
+    return await this.clientRepository.save(newclient);
+  }
+
+ 
   async addProductToFavourites(
     id: number,
     produit: ProduitEntity,
