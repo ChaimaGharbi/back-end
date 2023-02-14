@@ -64,6 +64,8 @@ export class CommerçantService {
       ...commande,
       status:statu
     });
+    console.log(commanderejeter);
+    
     return await this.produitRepository.save(commanderejeter);
     
   }

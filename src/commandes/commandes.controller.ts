@@ -12,7 +12,7 @@ export class CommandesController {
     ){}
 
 
-    @Get()
+    @Get() /** */
     async get(){
         return await this.commandesRepository.find();
     }

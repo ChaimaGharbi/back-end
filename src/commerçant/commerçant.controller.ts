@@ -1,6 +1,6 @@
 import { Controller, Query } from "@nestjs/common";
 import { CommerçantService } from './commerçant.service';
-import { Body, Get, Post, Put, Param, Delete } from '@nestjs/common/decorators';
+import { Body, Get, Post, Put, Param, Delete, Patch } from '@nestjs/common/decorators';
 import { ParseIntPipe } from '@nestjs/common/pipes';
 import { ProduitService } from 'src/produit/produit.service';
 import { CommerçantEntity } from './entities/commerçant.entity';
@@ -14,7 +14,7 @@ export class CommerçantController {
     private commercantService: CommerçantService,
   ) {}
 
-  @Get('/:id/commandes')
+  @Get('/:id/commandes')  /** */
   async getcommandes(@Param('id', ParseIntPipe) id: number) {
     const sql = await this.produitService.getProduitcommandee();
 
@@ -23,19 +23,19 @@ export class CommerçantController {
     return sql.getMany();
   }
 
-  @Get()
+  @Get() /** */
   async getAllComs(): Promise<CommerçantEntity[]> {
     return await this.commercantService.getCommercant();
   }
-  @Get('/:id')
+  @Get('/:id')  /** */
   async getComById(@Param('id', ParseIntPipe) id): Promise<CommerçantEntity> {
     return await this.commercantService.getCommercantById(id);
   }
-  @Post()
+  @Post()  /** */
   async addCom(@Body() addComDto: AddCommerçantDto): Promise<CommerçantEntity> {
     return await this.commercantService.addCommercant(addComDto);
   }
-  @Put('edit/:id')
+  @Put('edit/:id')  /** */
   async updateCom(
     @Param('id', ParseIntPipe) id: number,
     @Body() newCom: UpdateCommercantDto,
@@ -44,7 +44,7 @@ export class CommerçantController {
   }
 
 
-  @Put("/:produit_id/:client_id")
+  @Patch("/:produit_id/:client_id") /** */
   async hh(
 
     @Param('produit_id', ParseIntPipe) produit_id: number,

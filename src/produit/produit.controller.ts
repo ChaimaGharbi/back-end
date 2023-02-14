@@ -9,11 +9,12 @@ export class ProduitController {
   constructor(private produitService: ProduitService) {}
 
 
-  @Get()
+  @Get()   /** */
   async gettt(){
     return await this.produitService.gett();
   }
-  @Post('add/:id')
+
+  @Post('add/:id')  /** */
 
   async addProduit(
     @Body() newproduit: addProduitDto,
@@ -22,17 +23,17 @@ export class ProduitController {
     return await this.produitService.addProduit(id, newproduit);
   }
 
-  @Delete(':id')
+  @Delete(':id')   /** */
   async removeproduit(@Param('id', ParseIntPipe) id: number) {
     return await this.produitService.suppProduit(id);
   }
 
-  @Get('commercant/:id')
+  @Get('commercant/:id')  /** */
   async consultProduit(@Param('id', ParseIntPipe) id: number) {
     return this.produitService.consultProduit(id);
   }
 
-  @Put('edit/:id')
+  @Put('edit/:id')  /** */
   async editProduit(
     @Body() newproduit: updateProduitDto,
     @Param('id', ParseIntPipe) id: number,

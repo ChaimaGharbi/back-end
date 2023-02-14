@@ -84,12 +84,9 @@ export class ProduitService {
             throw new NotFoundException("client not found");
         }
         const qb = this.produitRepository.createQueryBuilder("produit");
-        return qb.innerJoin("commande", "c", "c.produit_id=produit.produit_id")
-            .where(`c.client_id = ${id}`);
-
-            
-            
-
+        qb.innerJoin("commandes", "c", "c.produit_id=produit.produit_id")
+        .where(`c.client_id = ${id}`);
+        return qb
 
     }
     async getProductById(id: number): Promise<ProduitEntity> {

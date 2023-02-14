@@ -13,14 +13,14 @@ export class ClientController {
     ) { }
 
 
-    @Get('client/commandes/:id')
+    @Get('commandes/:id') /** les commandes pour le client id */
     async getCommandes(
         @Param('id', ParseIntPipe) id: number
     ) {
         const sql = await this.produitService.consultCommandeClient(id);
         return sql.getMany();
     }
-    @Put('client/favourites/:id/:produit')
+    @Put('favourites/:id/:produit') /** */
     async editListOfFavourites(
         @Param('id', ParseIntPipe) id: number,
         @Param('produit', ParseIntPipe) produitid: number
