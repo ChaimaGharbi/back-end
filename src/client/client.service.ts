@@ -44,13 +44,7 @@ export class ClientService {
     if (!produit) {
       throw new NotFoundException('product not found');
     }
-    console.log(client);
-    console.log(produit);
-    client.favoris = [];
-    console.log(client.favoris);
-
     client.favoris.push(produit);
-    console.log(client.favoris);
     await this.clientRepository.save(client);
   }
   async getFavoritesList(id: number) {

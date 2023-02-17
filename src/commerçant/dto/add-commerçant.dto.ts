@@ -26,7 +26,7 @@ import {
     mdp: string;
   
     @IsNotEmpty()
-    address: string;
+    'nom du service': string;
     
     @IsPhoneNumber()
     @IsNotEmpty()

@@ -14,7 +14,7 @@ export class CommerçantEntity {
   @Column()
   mdp: string;
   @Column()
-  address: string;
+  'nom du service': string;
   @Column()
   salt: string;
   @Column()

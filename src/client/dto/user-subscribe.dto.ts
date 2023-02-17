@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty ,IsString ,IsNumber } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, IsNumber, IsEmpty, IsArray } from "class-validator";
+import { ProduitEntity } from "../../produit/entities/produit.entity";
 
 
 export class UsersubscribeDto {
@@ -17,5 +18,4 @@ export class UsersubscribeDto {
     @IsNotEmpty()
     @IsNumber()
     numTel: number;
-
 }
