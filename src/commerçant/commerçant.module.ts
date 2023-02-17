@@ -9,12 +9,21 @@ import { ClientEntity } from '../client/entities/client.entity';
 import { ClientService } from "../client/client.service";
 import { CommandesEntity } from 'src/commandes/entities/commandes.entity';
 import { CommandesService } from 'src/commandes/commandes.service';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([CommerçantEntity, ProduitEntity, ClientEntity,CommandesEntity]),
+    JwtModule.register({
+      secret : 'this is e-commerce website',
+      signOptions: { expiresIn: '1d' },
+    }),
+    PassportModule.register({
+      defaultStrategy: 'jwt'
+    })
   ],
   controllers: [CommerçantController],
-  providers: [CommerçantService, ProduitService, ClientService,CommandesService],
+  providers: [CommerçantService, ProduitService, ClientService, CommandesService],
 })
 export class CommerçantModule {}

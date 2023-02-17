@@ -16,6 +16,8 @@ export class CommerçantEntity {
   @Column()
   address: string;
   @Column()
+  salt: string;
+  @Column()
   numTel: number;
    @OneToMany((type) => ProduitEntity, (produit) => produit.commerçant)
   produits: ProduitEntity[];

@@ -10,10 +10,11 @@ import { CommandesEntity } from 'src/commandes/entities/commandes.entity';
 import { CommerçantService } from 'src/commerçant/commerçant.service';
 import { CommandesModule } from 'src/commandes/commandes.module';
 import { ClientModule } from 'src/client/client.module';
+import { JwtService } from '@nestjs/jwt/dist';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProduitEntity,CommerçantEntity, ClientEntity, CommandesEntity]),ClientModule , CommandesModule ],
+  imports: [TypeOrmModule.forFeature([ProduitEntity,CommerçantEntity, ClientEntity, CommandesEntity]),ClientModule , CommandesModule,],
   controllers: [ProduitController],
-  providers: [ProduitService,CommerçantService,ClientService],
+  providers: [ProduitService,CommerçantService,ClientService,JwtService],
 })
 export class ProduitModule { }

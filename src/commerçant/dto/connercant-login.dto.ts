@@ -1,7 +1,7 @@
 import { IsEmail, IsNotEmpty ,IsString  } from 'class-validator';
 
 
-export class UserloginDto {
+export class commercantLoginDto {
     @IsEmail()
     @IsNotEmpty()
     email:string ;
@@ -11,4 +11,3 @@ export class UserloginDto {
     mdp:string ;
 
 }
-/**@UseGuards(JwtAuthGuardcommercant)  */

@@ -1,13 +1,18 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { ClientEntity } from './entities/client.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProduitEntity } from 'src/produit/entities/produit.entity';
 import { UpdateClientDto } from './dto/update-client.dto';
+import { UsersubscribeDto } from './dto/user-subscribe.dto';
+import * as bcrypt from "bcrypt" ;
+import { UserloginDto } from './dto/user-login.dto';
+import { JwtService } from '@nestjs/jwt/dist';
 
 @Injectable()
 export class ClientService {
   constructor(
+    private jwtService :JwtService,
     @InjectRepository(ClientEntity)
     private clientRepository: Repository<ClientEntity>,
     @InjectRepository(ProduitEntity)
@@ -62,4 +67,56 @@ export class ClientService {
   async getClientById(id: number): Promise<ClientEntity> {
     return await this.clientRepository.findOne({ where: { client_id: id } });
   }
+
+
+  async register(userdata:UsersubscribeDto) : Promise<ClientEntity>{
+    const prev = await this.clientRepository.findOne({where:{email:userdata.email}});
+    if (prev){
+      throw new ConflictException("le user name et le password doivent etre unique");
+    }
+    const user = this.clientRepository.create({...userdata});
+    user.salt=await bcrypt.genSalt();
+    user.mdp=await bcrypt.hash(user.mdp,user.salt);
+
+    await this.clientRepository.save(user);
+    
+   return user ;
+
+  }
+
+
+  async login(credentials:UserloginDto){
+
+    const {email , mdp}=credentials;
+    const user =await this.clientRepository.createQueryBuilder("client")
+         .where("client.email= :email",{email})
+         .getOne() ;
+    if (!user){
+        throw new NotFoundException("email ou mot de passe erroné");
+    }
+    const hashedPassword =await bcrypt.hash(mdp,user.salt);
+    if (hashedPassword==user.mdp){
+        const payload={
+            email: user.email,
+            client_id:user.client_id,
+            adresse:user.adresse,
+            numTel:user.numTel,
+            name:user.name,
+            firstname:user.firstname
+        };
+        const jwt=await this.jwtService.sign(payload);
+        return{
+            access_token: jwt,
+            client_id:user.client_id,
+            
+        };
+    }
+    else{
+        throw new NotFoundException("mot de passe erroné");
+    }
+
+
+}
+
+
 }

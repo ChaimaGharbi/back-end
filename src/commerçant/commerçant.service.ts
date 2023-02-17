@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AddCommerçantDto } from './dto/add-commerçant.dto';
@@ -8,10 +8,14 @@ import { ClientEntity } from '../client/entities/client.entity';
 import { ProduitEntity } from '../produit/entities/produit.entity';
 import { CommandesEntity } from 'src/commandes/entities/commandes.entity';
 import { stat } from 'fs';
+import * as bcrypt from "bcrypt" ;
+import { UserloginDto } from 'src/client/dto/user-login.dto';
+import { JwtService } from '@nestjs/jwt/dist';
 
 @Injectable()
 export class CommerçantService {
   constructor(
+    private jwtService :JwtService,
     @InjectRepository(CommerçantEntity)
     private commercantRepository: Repository<CommerçantEntity>,
     @InjectRepository(ClientEntity)
@@ -21,6 +25,16 @@ export class CommerçantService {
     @InjectRepository(CommandesEntity)
     private commandesRepository: Repository<CommandesEntity>,
   ) {}
+
+
+  auth(authorization,id){
+    authorization=authorization.split(' ')[1]
+    const decoded = this.jwtService.verify(authorization);  
+    let commerçant_id  = decoded.commerçant_id 
+    if (commerçant_id !=id){
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    } 
+  }
 
   async getCommercant(): Promise<CommerçantEntity[]> {
     return await this.commercantRepository.find();
@@ -35,9 +49,52 @@ export class CommerçantService {
     return com;
   }
 
-  async addCommercant(com: AddCommerçantDto): Promise<CommerçantEntity> {
-    return await this.commercantRepository.save(com);
+  async register(comdata: AddCommerçantDto): Promise<CommerçantEntity> {
+    const prev = await this.commercantRepository.findOne({where:{email:comdata.email}});
+    if (prev){
+      throw new ConflictException("le user name et le password doivent etre unique");
+    }
+    const user = this.commercantRepository.create({...comdata});
+    user.salt=await bcrypt.genSalt();
+    user.mdp=await bcrypt.hash(user.mdp,user.salt);
+
+    await this.commercantRepository.save(user);
+
+   return user ;
   }
+
+  async login(credentials:UserloginDto){
+
+    const {email , mdp}=credentials;
+    const user =await this.commercantRepository.findOne({where:{email}})
+    
+    if (!user){
+        throw new NotFoundException("email ou mot de passe erroné");
+    }
+    const hashedPassword =await bcrypt.hash(mdp,user.salt);
+    if (hashedPassword==user.mdp){
+        const payload={
+            email: user.email,
+            commerçant_id:user.commerçant_id,
+            adresse:user.address,
+            numTel:user.numTel,
+            
+        };
+
+        const jwt=await this.jwtService.sign(payload);
+        return{
+            access_token: jwt,
+            commerçant_id:user.commerçant_id,
+        };
+    }
+    else{
+        throw new NotFoundException("mot de passe erroné");
+    }
+
+
+}
+
+
   async updateCommercant(id: number, newCom: UpdateCommercantDto) {
     const com = await this.commercantRepository.preload({
       commerçant_id: id,
