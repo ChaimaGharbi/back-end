@@ -8,9 +8,18 @@ export class CommerçantEntity {
   @Column()
   email: string;
   @Column()
+  name: string;
+  @Column()
+  firstname: string;
+  @Column()
   mdp: string;
   @Column()
+  'nom du service': string;
+  @Column()
+  salt: string;
+  @Column()
   numTel: number;
-  @OneToMany((type) => ProduitEntity, (produit) => produit.commerçant,)
+   @OneToMany((type) => ProduitEntity, (produit) => produit.commerçant)
   produits: ProduitEntity[];
+  
 }

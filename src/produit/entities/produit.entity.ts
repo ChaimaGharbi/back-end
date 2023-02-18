@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { CommerçantEntity } from '../../commerçant/entities/commerçant.entity';
 
 @Entity('produit')
@@ -13,6 +13,11 @@ export class ProduitEntity {
   description: string;
   @Column()
   prix: number;
-  @ManyToOne((type) => CommerçantEntity, (commerçant) => commerçant.produits,{cascade:true})
+  @Column()
+  stock: number;
+  @ManyToOne((type) => CommerçantEntity, (commerçant) => commerçant.produits ,{
+    cascade: true,
+  })
   commerçant: CommerçantEntity;
+  
 }

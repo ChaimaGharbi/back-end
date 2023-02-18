@@ -15,7 +15,13 @@ export class ClientEntity {
   @Column()
   email: string;
   @Column()
+  name: string;
+  @Column()
+  firstname: string;
+  @Column()
   mdp: string;
+  @Column()
+  salt: string;
   @Column()
   adresse: string;
   @Column()
@@ -36,4 +42,5 @@ export class ClientEntity {
   })
   @Optional()
   favoris: ProduitEntity[];
+  
 }
