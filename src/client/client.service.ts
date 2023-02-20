@@ -33,21 +33,7 @@ export class ClientService {
     return await this.clientRepository.save(newclient);
   }
 
- 
-  async addProductToFavourites(
-    id: number,
-    produit: ProduitEntity,
-  ): Promise<void> {
-    const client = await this.getClientById(id);
-    if (!client) {
-      throw new NotFoundException('client not found');
-    }
-    if (!produit) {
-      throw new NotFoundException('product not found');
-    }
-    client.favoris.push(produit);
-    await this.clientRepository.save(client);
-  }
+
   async getFavoritesList(id: number) {
     const client = await this.getClientById(id);
     if (!client) {

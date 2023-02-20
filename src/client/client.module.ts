@@ -12,16 +12,19 @@ import { CommandesService } from 'src/commandes/commandes.service';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategy/passport-jwt.strategy';
+import { FavorisService } from 'src/favoris/favoris.service';
+import { FavorisEntity } from 'src/favoris/entities/favoris.entity';
+import { FavorisController } from 'src/favoris/favoris.controller';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([ClientEntity,ProduitEntity,CommerçantEntity,CommandesEntity]),
+  imports: [TypeOrmModule.forFeature([ClientEntity, ProduitEntity, CommerçantEntity, CommandesEntity, FavorisEntity]),
   JwtModule.register({
-    secret : 'this is e-commerce website'
+    secret: 'this is e-commerce website'
   }),
   PassportModule.register({
     defaultStrategy: 'jwt'
   })],
-  controllers: [ClientController],
-  providers: [ClientService,ProduitService,CommerçantService, CommandesService,JwtStrategy]
+  controllers: [ClientController, FavorisController],
+  providers: [ClientService, ProduitService, CommerçantService, CommandesService, JwtStrategy, FavorisService]
 })
 export class ClientModule { }
