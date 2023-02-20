@@ -1,5 +1,5 @@
 import { Controller, ParseIntPipe, UseGuards } from '@nestjs/common';
-import { Body, Param, Get, Patch, Post, Delete, Put } from '@nestjs/common/decorators';
+import { Body, Param, Get, Patch, Post, Delete, Put, Headers } from "@nestjs/common/decorators";
 import { ProduitEntity } from './entities/produit.entity';
 import { ProduitService } from './produit.service';
 import { addProduitDto } from './dto/add-produit.dto';
@@ -11,9 +11,9 @@ import { IsCommercantGuard } from 'src/commerçant/guards/iscommercant.guard';
 @Controller('produit')
 export class ProduitController {
   constructor(private produitService: ProduitService) {}
-  
-  @UseGuards(JwtAuthGuard,IsClientGuard)
-  /*@Get()
+
+  /*@UseGuards(JwtAuthGuard,IsClientGuard)
+  @Get()
   async getAllProduits(): Promise<ProduitEntity[]> {
     return await this.produitService.getProduits();
   }*/
@@ -26,29 +26,33 @@ export class ProduitController {
     return await this.produitService.CommandProduit(idClient, idProduit);
   }
 
-  @UseGuards(JwtAuthGuard,IsCommercantGuard)
+  //@UseGuards(IsCommercantGuard)
   @Post('add/:id') /** */ async addProduit(
     @Body() newproduit: addProduitDto,
     @Param('id', ParseIntPipe) id: number,
   ) {
     return await this.produitService.addProduit(id, newproduit);
   }
-
-  @UseGuards(JwtAuthGuard,IsCommercantGuard)
+  @Get(':id') async getProduit(
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return await this.produitService.gett(id);
+  }
+  //@UseGuards(IsCommercantGuard)
   @Delete(':id') /** */ async removeproduit(
     @Param('id', ParseIntPipe) id: number,
   ) {
     return await this.produitService.suppProduit(id);
   }
 
-  @UseGuards(JwtAuthGuard,IsCommercantGuard)
+  //@UseGuards(IsCommercantGuard)
   @Get('commercant/:id') /** */ async consultProduit(
     @Param('id', ParseIntPipe) id: number,
   ) {
     return this.produitService.consultProduit(id);
   }
 
-  @UseGuards(JwtAuthGuard,IsCommercantGuard)
+  //@UseGuards(IsCommercantGuard)
   @Put('edit/:id') /** */ async editProduit(
     @Body() newproduit: updateProduitDto,
     @Param('id', ParseIntPipe) id: number,

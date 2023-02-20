@@ -8,9 +8,7 @@ import {
   
   export class AddCommerçantDto {
     @IsString()
-    @IsNotEmpty({
-      message: 'Ce champs est obligatoire!',
-    })
+    @IsNotEmpty()
     name: string;
   
     @IsNotEmpty()
@@ -26,8 +24,11 @@ import {
     mdp: string;
   
     @IsNotEmpty()
-    'nom du service': string;
-    
+    @IsString()
+    nom_du_service: string;
+    @IsNotEmpty()
+    @IsString()
+    imgURL: string;
     @IsPhoneNumber()
     @IsNotEmpty()
     numTel: number;

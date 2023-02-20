@@ -8,7 +8,7 @@ import { JwtService } from '@nestjs/jwt/dist';
 @Module({
   imports: [TypeOrmModule.forFeature([CommandesEntity])],
   controllers: [CommandesController],
-  providers: [CommandesService,JwtService],
+  providers: [CommandesService, JwtService],
   exports:[CommandesService,]
 
 })

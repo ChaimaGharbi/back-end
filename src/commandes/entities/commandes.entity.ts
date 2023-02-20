@@ -1,5 +1,6 @@
 import { Entity, ManyToOne, JoinColumn, PrimaryColumn, Column } from 'typeorm';
 import { ClientEntity } from 'src/client/entities/client.entity';
+import { ProduitEntity } from "../../produit/entities/produit.entity";
 
 @Entity('commandes')
 export class CommandesEntity {
@@ -18,4 +19,7 @@ export class CommandesEntity {
   })
   @JoinColumn([{ name: 'client_id', referencedColumnName: 'client_id' }])
   clients: ClientEntity[];
+  @ManyToOne(() => ProduitEntity, { eager: true })
+  @JoinColumn({ name: 'produit_id' })
+  produit: ProduitEntity;
 }

@@ -1,5 +1,6 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { CommerçantEntity } from '../../commerçant/entities/commerçant.entity';
+import { CommandesEntity } from "../../commandes/entities/commandes.entity";
 
 @Entity('produit')
 export class ProduitEntity {
@@ -19,5 +20,6 @@ export class ProduitEntity {
     cascade: true,
   })
   commerçant: CommerçantEntity;
-  
+  @OneToMany(() => CommandesEntity, commande => commande.produit, { cascade: true })
+  commandes: CommandesEntity[];
 }

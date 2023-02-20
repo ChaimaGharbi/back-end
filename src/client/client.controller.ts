@@ -79,7 +79,8 @@ export class ClientController {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }
     const produit = await this.produitService.getProductById(produitid);
-    return await this.clientService.addProductToFavourites(id, produit);
+    const client = await this.clientService.getClientById(id);
+    return await this.clientService.addProductToFavourites(client, produit);
   }
   @UseGuards(JwtAuthGuard, IsClientGuard)
   @Get('favourites/:id')

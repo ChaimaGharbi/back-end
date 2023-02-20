@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Optional } from '@nestjs/common';
 import { ProduitEntity } from '../../produit/entities/produit.entity';
+import { CommandesEntity } from "../../commandes/entities/commandes.entity";
 
 @Entity('client')
 export class ClientEntity {

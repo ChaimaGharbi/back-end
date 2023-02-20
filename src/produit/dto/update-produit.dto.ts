@@ -21,8 +21,12 @@ import {
     @IsOptional()
     description: string;
   
-    @IsString()
+    @IsNumber()
     @IsOptional()
     @Type(() => Number)
     prix: number;
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    stock: number;
   }

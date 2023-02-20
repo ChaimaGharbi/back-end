@@ -17,9 +17,13 @@ export class addProduitDto{
     @IsNotEmpty()
     description: string;
 
-    @IsString()
+    @IsNumber()
     @IsNotEmpty()
     @Type(() => Number)
     prix: number;
+@IsNumber()
+@IsNotEmpty()
+@Type(() => Number)
+    stock: number;
 
 }
