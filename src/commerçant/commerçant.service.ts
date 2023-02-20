@@ -138,11 +138,10 @@ export class CommerçantService {
       throw new NotFoundException('client ou produit incorect');
     }
 
-    const statu = 'accepté';
+    const statu = 'acceptée';
 
     commande.status = statu;
-
-    return await this.produitRepository.save(commande);
+    return await this.commandesRepository.save(commande);
   }
   async getCommandesByCommercantId(commercant_id: number): Promise<CommandesEntity[]> {
     const commandes = await this.commandesRepository

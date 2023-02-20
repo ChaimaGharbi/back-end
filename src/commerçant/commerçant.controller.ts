@@ -53,7 +53,7 @@ export class CommerçantController {
     return await this.commercantService.getCommercant();
   }*/
 
-  @UseGuards(JwtAuthGuard, IsCommercantGuard)
+  //@UseGuards(JwtAuthGuard,IsCommercantGuard)
   @Get('/:id') /** */ async getComById(
     @Param('id', ParseIntPipe) id,
     @Headers('Authorization') authorization,
