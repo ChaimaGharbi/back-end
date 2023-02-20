@@ -147,4 +147,69 @@ export class CommerçantService {
 
     return await this.produitRepository.save(commanderejeter);
   }
+
+  
+
+  ////  summary page
+async getNbcustomer(idd:number) : Promise<number>{
+
+    const queryBuilder = this.commandesRepository
+   .createQueryBuilder('cm')
+   .select('COUNT(DISTINCT cm.client_id)', 'count')
+   .innerJoin('produit', 'p', 'cm.produit_id = p.produit_id')
+   .innerJoin('commerçant', 'c', 'p.commerçantCommerçantId = c.commerçant_id')
+   .where('c.commerçant_id = :id', { id: idd});
+
+   const results = await queryBuilder.getRawOne();
+    
+    return await results;
+
+ }
+ 
+async getNbProduct(idd:number) : Promise<number>{
+   const queryBuilder = this.produitRepository
+   .createQueryBuilder('p')
+   .select('COUNT(*)', 'count')
+   .innerJoin('commerçant', 'c', 'p.commerçantCommerçantId = c.commerçant_id')
+   .where('c.commerçant_id = :id', { id: idd });
+
+   const results = await queryBuilder.getRawOne();
+    return await (results) ;
+
+ }
+
+async getEarnings(idd:number) : Promise<number>{
+  
+  const queryBuilder = this.commandesRepository
+  .createQueryBuilder('cm')
+  .select("SUM(p.prix)","total")
+  .innerJoin('produit', 'p', 'cm.produit_id = p.produit_id')
+  .innerJoin('commerçant', 'c', 'p.commerçantCommerçantId = c.commerçant_id')
+  .where('c.commerçant_id = :id', { id: idd })
+  .andWhere('cm.status = "accepté"');
+
+  const results = await queryBuilder.getRawOne();
+    return await (results) ;
+
 }
+ async getbestproduct(idd:number) : Promise<any[]>{
+  const queryBuilder = this.commandesRepository
+  .createQueryBuilder('cm')
+  .select('p.nom','label')
+  .addSelect('COUNT(*)', 'unit')
+  .innerJoin('produit', 'p', 'cm.produit_id = p.produit_id')
+  .innerJoin('commerçant', 'c', 'p.commerçantCommerçantId = c.commerçant_id')
+  .where('c.commerçant_id = :id', { id: idd})
+  .andWhere('cm.status = "accepté"')
+  .groupBy('p.nom')
+  .orderBy('unit', 'DESC')
+  .limit(5);  
+
+const results = await queryBuilder.getRawMany();
+
+    return await(results) ;
+
+ }
+  ////  summary page
+}
+

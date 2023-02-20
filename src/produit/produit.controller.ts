@@ -13,10 +13,10 @@ export class ProduitController {
   constructor(private produitService: ProduitService) {}
   
   @UseGuards(JwtAuthGuard,IsClientGuard)
-  /*@Get()
+  @Get()
   async getAllProduits(): Promise<ProduitEntity[]> {
     return await this.produitService.getProduits();
-  }*/
+  }
   @UseGuards(JwtAuthGuard,IsClientGuard)
   @Patch('command/:idClient/:idProduit')
   async CommanderProduit(
