@@ -113,7 +113,6 @@ export class ProduitService {
       produit_id: produit_id,
     });
     const client = await this.clientService.find(idClient);
-    produit.stock = produit.stock - 1;
     const newproduit = await this.produitRepository.preload({
       produit_id,
       ...produit,

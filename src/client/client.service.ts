@@ -40,7 +40,6 @@ export class ClientService {
     client: ClientEntity,
     produit: ProduitEntity,
   ): Promise<void> {
-
     if (!client) {
       throw new NotFoundException('client not found');
     }

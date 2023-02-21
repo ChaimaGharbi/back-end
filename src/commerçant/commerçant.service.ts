@@ -137,7 +137,12 @@ export class CommerçantService {
     }
 
     const statu = 'acceptée';
+    const produit = await this.produitRepository.findOne({
+      where: { produit_id },
+    });
 
+    produit.stock = produit.stock - 1;
+    await this.produitRepository.save(produit);
     commande.status = statu;
     return await this.commandesRepository.save(commande);
   }
