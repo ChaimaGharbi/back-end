@@ -3,7 +3,7 @@ import { ProduitService } from 'src/produit/produit.service';
 import { ClientService } from './client.service';
 import { ParseIntPipe } from '@nestjs/common';
 import { UsersubscribeDto } from './dto/user-subscribe.dto';
-import { Delete, Post } from '@nestjs/common/decorators';
+import { Delete, Headers, Post } from "@nestjs/common/decorators";
 import { UserloginDto } from './dto/user-login.dto';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -13,6 +13,9 @@ import { HttpException } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common';
 import { FavorisService } from 'src/favoris/favoris.service';
 import { ClientEntity } from './entities/client.entity';
+import { Req } from "@nestjs/common/decorators/http/route-params.decorator";
+import { CommerçantEntity } from "../commerçant/entities/commerçant.entity";
+import { UpdateClientDto } from "./dto/update-client.dto";
 
 @Controller('client')
 export class ClientController {
@@ -22,7 +25,29 @@ export class ClientController {
     private clientService: ClientService,
     private favorisService: FavorisService,
   ) {}
+  @Get('/:id') /** */ async getClientById(
+    @Param('id', ParseIntPipe) id,
+    @Headers('Authorization') authorization,
+    @Req() req,
+  ): Promise<ClientEntity> {
+    return await this.clientService.find(id);
+  }
+  @Put('update/:id')
+  async updateClient(
+    @Param('id', ParseIntPipe) id_Client: number,
+    @Body() UpdateClientDto: UpdateClientDto,
+    @Req() req,
+    @Headers('authorization') authorization
+  ): Promise<ClientEntity> {
 
+    /*authorization=authorization.split(' ')[1]
+    const decoded = this.jwtService.verify(authorization);
+    let clientid = decoded.client_id
+    if (clientid!=id_Client){
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }*/
+    return await this.clientService.update(id_Client, UpdateClientDto);
+  }
   //@UseGuards(JwtAuthGuard, IsClientGuard)
   @Get('commandes/:id') /** les commandes pour le client id */
   async getCommandes(
@@ -94,7 +119,7 @@ export class ClientController {
     return await this.clientService.register(userdata);
   }
 
-  @Get('auth/login')
+  @Post('auth/login')
   async login(@Body() credentials: UserloginDto) {
     return await this.clientService.login(credentials);
   }
