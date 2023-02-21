@@ -20,7 +20,7 @@ import { JwtAuthGuard } from './guards/jwt-authcommercant.gards';
 import { commercantLoginDto } from './dto/connercant-login.dto';
 import { IsCommercantGuard } from './guards/iscommercant.guard';
 import { JwtService } from '@nestjs/jwt';
-import { Req } from "@nestjs/common/decorators/http/route-params.decorator";
+import { Req } from '@nestjs/common/decorators/http/route-params.decorator';
 
 @Controller('commercant')
 export class CommerçantController {
@@ -57,7 +57,7 @@ export class CommerçantController {
   @Get('/:id') /** */ async getComById(
     @Param('id', ParseIntPipe) id,
     @Headers('Authorization') authorization,
-    @Req() req
+    @Req() req,
   ): Promise<CommerçantEntity> {
     return await this.commercantService.getCommercantById(id);
   }

@@ -26,4 +26,7 @@ import {
   
     @IsOptional()
     commandes: ProduitEntity[];
+    @IsOptional()
+    @IsString()
+    imgURL: string;
   }

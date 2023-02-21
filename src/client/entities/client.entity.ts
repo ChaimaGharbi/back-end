@@ -27,6 +27,8 @@ export class ClientEntity {
   adresse: string;
   @Column()
   numTel: number;
+  @Column()
+  imgURL: string;
   @ManyToMany((type) => ProduitEntity)
   @JoinTable({
     name: 'commandes',

@@ -32,6 +32,9 @@ export class UsersubscribeDto {
   @IsNotEmpty()
   @IsNumber()
   numTel: number;
+  @IsNotEmpty()
+  @IsString()
+  imgURL: string;
   @IsOptional()
   favoris: ProduitEntity[];
 }
