@@ -59,8 +59,6 @@ export class CommerçantController {
     @Headers('Authorization') authorization,
     @Req() req
   ): Promise<CommerçantEntity> {
-    console.log(req);
-    console.log(authorization);
     return await this.commercantService.getCommercantById(id);
   }
 

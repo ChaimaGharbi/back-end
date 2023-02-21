@@ -104,7 +104,7 @@ export class ClientController {
     return await this.clientService.register(userdata);
   }
 
-  @Get('auth/login')
+  @Post('auth/login')
   async login(@Body() credentials: UserloginDto) {
     return await this.clientService.login(credentials);
   }

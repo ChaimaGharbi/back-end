@@ -63,9 +63,7 @@ export class CommerçantService {
     if (prev) {
       throw new ConflictException("l'email et le password doivent etre unique");
     }
-    console.log(comdata);
     const user = this.commercantRepository.create({ ...comdata });
-    console.log(user);
     user.salt = await bcrypt.genSalt();
     user.mdp = await bcrypt.hash(user.mdp, user.salt);
 
