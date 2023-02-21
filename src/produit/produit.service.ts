@@ -7,18 +7,23 @@ import { Repository } from 'typeorm';
 import { ProduitEntity } from './entities/produit.entity';
 import { ClientService } from 'src/client/client.service';
 import { CommandesService } from '../commandes/commandes.service';
+import { JwtService } from '@nestjs/jwt/dist';
+import { CommandesEntity } from "../commandes/entities/commandes.entity";
 @Injectable()
 export class ProduitService {
+  private jwtService: JwtService;
   constructor(
     @InjectRepository(ProduitEntity)
     private produitRepository: Repository<ProduitEntity>,
     private commercantService: CommerçantService,
     private clientService: ClientService,
     private commandesService: CommandesService,
+    @InjectRepository(CommandesEntity)
+    private commandesRepository: Repository<CommandesEntity>
   ) {}
 
-  async gett() {
-    return await this.produitRepository.find();
+  async gett(produit_id: number): Promise<ProduitEntity> {
+    return await this.produitRepository.findOne({ where: { produit_id } });
   }
 
   async addProduit(id: number, produit: addProduitDto): Promise<ProduitEntity> {
@@ -37,10 +42,18 @@ export class ProduitService {
   async suppProduit(id: number) {
     const produit = await this.produitRepository.findOne({
       where: { produit_id: id },
+      relations: ['commandes'] // add 'commandes' relation
     });
+
     if (!produit) {
       throw new NotFoundException('product not found');
     }
+
+    await Promise.all(
+      produit.commandes.map((commande) =>
+        this.commandesRepository.remove(commande),
+      ),
+    );
 
     return await this.produitRepository.remove(produit);
   }
@@ -100,7 +113,6 @@ export class ProduitService {
       produit_id: produit_id,
     });
     const client = await this.clientService.find(idClient);
-    produit.stock = produit.stock - 1;
     const newproduit = await this.produitRepository.preload({
       produit_id,
       ...produit,
@@ -108,8 +120,6 @@ export class ProduitService {
     await this.produitRepository.save(newproduit);
     const AddCommandeDto = { client_id: idClient, produit_id: produit_id };
     await this.commandesService.add(AddCommandeDto);
-    console.log(client.commandes);
-    console.log(newproduit);
     return produit;
   }
 }

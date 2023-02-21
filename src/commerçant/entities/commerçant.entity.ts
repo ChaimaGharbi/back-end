@@ -6,6 +6,8 @@ export class CommerçantEntity {
   @PrimaryGeneratedColumn()
   commerçant_id: number;
   @Column()
+  imgURL: string;
+  @Column()
   email: string;
   @Column()
   name: string;
@@ -14,7 +16,7 @@ export class CommerçantEntity {
   @Column()
   mdp: string;
   @Column()
-  'nom du service': string;
+  nom_du_service: string;
   @Column()
   salt: string;
   @Column()

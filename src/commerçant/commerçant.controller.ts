@@ -20,6 +20,7 @@ import { JwtAuthGuard } from './guards/jwt-authcommercant.gards';
 import { commercantLoginDto } from './dto/connercant-login.dto';
 import { IsCommercantGuard } from './guards/iscommercant.guard';
 import { JwtService } from '@nestjs/jwt';
+import { Req } from '@nestjs/common/decorators/http/route-params.decorator';
 
 @Controller('commercant')
 export class CommerçantController {
@@ -29,13 +30,13 @@ export class CommerçantController {
     private commercantService: CommerçantService,
   ) {}
 
-  @Get('auth/login')
+  @Post('auth/login')
   async log(@Body() credentials: commercantLoginDto) {
     return await this.commercantService.login(credentials);
   }
 
-  @UseGuards(JwtAuthGuard, IsCommercantGuard)
-  @Get('/:id/commandes') /** */
+  //@UseGuards(JwtAuthGuard, IsCommercantGuard)
+  /*@Get('/:id/commandes') 
   async getcommandes(
     @Param('id', ParseIntPipe) id: number,
     @Headers('authorization') authorization,
@@ -46,17 +47,17 @@ export class CommerçantController {
     sql.where(`commerçantCommerçantId = ${id}`);
 
     return sql.getMany();
-  }
+  }*/
 
   /**@Get() /**  async getAllComs(): Promise<CommerçantEntity[]> {
     return await this.commercantService.getCommercant();
   }*/
 
-  @UseGuards(JwtAuthGuard, IsCommercantGuard)
-  @Get('/:id') /** */
-  async getComById(
+  //@UseGuards(JwtAuthGuard,IsCommercantGuard)
+  @Get('/:id') /** */ async getComById(
     @Param('id', ParseIntPipe) id,
-    @Headers('authorization') authorization,
+    @Headers('Authorization') authorization,
+    @Req() req,
   ): Promise<CommerçantEntity> {
     return await this.commercantService.getCommercantById(id);
   }
@@ -67,41 +68,38 @@ export class CommerçantController {
     return await this.commercantService.register(addComDto);
   }
 
-  @UseGuards(JwtAuthGuard, IsCommercantGuard)
-  @Put('edit/:id') /** */
-  async updateCom(
+  // @UseGuards(JwtAuthGuard, IsCommercantGuard)
+  @Put('edit/:id') /** */ async updateCom(
     @Param('id', ParseIntPipe) id: number,
     @Body() newCom: UpdateCommercantDto,
-    @Headers('authorization') authorization,
+    //@Headers('authorization') authorization,
   ): Promise<CommerçantEntity> {
-    this.commercantService.auth(authorization, id);
+    //this.commercantService.auth(authorization, id);
     return await this.commercantService.updateCommercant(id, newCom);
   }
 
-  @UseGuards(JwtAuthGuard, IsCommercantGuard)
-  @Patch('delete/:id/:produit_id/:client_id') /** */
-  async deleteCommande(
+  //@UseGuards(JwtAuthGuard, IsCommercantGuard)
+  @Patch('delete/:id/:produit_id/:client_id') /** */ async deleteCommande(
     @Param('id', ParseIntPipe) id: number,
     @Param('produit_id', ParseIntPipe) produit_id: number,
     @Param('client_id', ParseIntPipe) client_id: number,
     @Headers('authorization') authorization,
   ) {
-    this.commercantService.auth(authorization, id);
+    //this.commercantService.auth(authorization, id);
     return await this.commercantService.deleteProduitFromCommandes(
       client_id,
       produit_id,
     );
   }
 
-  @UseGuards(JwtAuthGuard, IsCommercantGuard)
-  @Patch('accepte/:id/:produit_id/:client_id') /** */
-  async accepteCommande(
+  //@UseGuards(JwtAuthGuard, IsCommercantGuard)
+  @Patch('accepte/:id/:produit_id/:client_id') /** */ async accepteCommande(
     @Param('id', ParseIntPipe) id: number,
     @Param('produit_id', ParseIntPipe) produit_id: number,
     @Param('client_id', ParseIntPipe) client_id: number,
     @Headers('authorization') authorization,
   ) {
-    this.commercantService.auth(authorization, id);
+    //this.commercantService.auth(authorization, id);
     return await this.commercantService.accepterCommandes(
       client_id,
       produit_id,
@@ -130,5 +128,11 @@ async getbestproduct(@Param('id', ParseIntPipe) id: number){
 return await this.commercantService.getbestproduct(id);
 }
 /// end summary 
+
+
+  @Get('/:id/commandes')
+  async getcommandes(@Param('id', ParseIntPipe) id: number) {
+    return await this.commercantService.getCommandesByCommercantId(id);
+  }
 
 }

@@ -17,6 +17,8 @@ import { stat } from 'fs';
 import * as bcrypt from 'bcrypt';
 import { UserloginDto } from 'src/client/dto/user-login.dto';
 import { JwtService } from '@nestjs/jwt/dist';
+import { Param } from "@nestjs/common/decorators";
+import { ParseIntPipe } from "@nestjs/common/pipes";
 
 @Injectable()
 export class CommerçantService {
@@ -73,7 +75,6 @@ export class CommerçantService {
   async login(credentials: UserloginDto) {
     const { email, mdp } = credentials;
     const user = await this.commercantRepository.findOne({ where: { email } });
-
     if (!user) {
       throw new NotFoundException('email ou mot de passe erroné');
     }
@@ -81,12 +82,15 @@ export class CommerçantService {
     if (hashedPassword == user.mdp) {
       const payload = {
         email: user.email,
+        name: user.name,
+        firstname: user.firstname,
+        imgURL: user.imgURL,
         commerçant_id: user.commerçant_id,
-        'nom du service': user['nom du service'],
+        nom_du_service: user.nom_du_service,
         numTel: user.numTel,
       };
 
-      const jwt = await this.jwtService.sign(payload);
+      const jwt = this.jwtService.sign(payload);
       return {
         access_token: jwt,
         commerçant_id: user.commerçant_id,
@@ -107,7 +111,7 @@ export class CommerçantService {
   async deleteProduitFromCommandes(
     client_id: number,
     produit_id: number,
-  ): Promise<CommandesEntity> {
+  ) {
     const commande = await this.commandesRepository.findOne({
       where: { client_id, produit_id },
     });
@@ -115,15 +119,10 @@ export class CommerçantService {
     if (!commande) {
       throw new NotFoundException('client ou produit incorect');
     }
-
     const statu = 'rejetée';
 
-    const commanderejeter = await this.commandesRepository.preload({
-      ...commande,
-      status: statu,
-    });
-    console.log(commanderejeter);
-    return await this.commandesRepository.save(commanderejeter);
+    commande.status = statu;
+    return await this.commandesRepository.save(commande);
   }
   async accepterCommandes(
     client_id: number,
@@ -137,15 +136,23 @@ export class CommerçantService {
       throw new NotFoundException('client ou produit incorect');
     }
 
-    const statu = 'accepté';
-
-    const commanderejeter = await this.commandesRepository.preload({
-      ...commande,
-      status: statu,
+    const statu = 'acceptée';
+    const produit = await this.produitRepository.findOne({
+      where: { produit_id },
     });
-    console.log(commanderejeter);
 
-    return await this.produitRepository.save(commanderejeter);
+    produit.stock = produit.stock - 1;
+    await this.produitRepository.save(produit);
+    commande.status = statu;
+    return await this.commandesRepository.save(commande);
+  }
+  async getCommandesByCommercantId(commercant_id: number): Promise<CommandesEntity[]> {
+    const commandes = await this.commandesRepository
+      .createQueryBuilder('commande')
+      .leftJoin('commande.produit', 'produit')
+      .where('produit.commer\u00E7antCommer\u00E7antId = :commercant_id', {commercant_id})
+      .getMany();
+    return commandes;
   }
 
   

@@ -11,12 +11,26 @@ import {
     @IsString()
     @IsOptional()
     name: string;
-    @IsNotEmpty()
+
     @IsOptional()
+    @IsString()
     firstname: string;
+
     @IsOptional()
-    address: string;
+    @IsEmail()
+    email: string;
+
+    @IsOptional()
+    @IsStrongPassword()
+    mdp: string;
+
+    @IsOptional()
+    @IsString()
+    nom_du_service: string;
+    @IsOptional()
+    @IsString()
+    imgURL: string;
     @IsPhoneNumber()
-    @IsOptional()
+    @IsNotEmpty()
     numTel: number;
   }
