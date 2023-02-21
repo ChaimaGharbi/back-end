@@ -12,12 +12,14 @@ import { IsCommercantGuard } from 'src/commerçant/guards/iscommercant.guard';
 export class ProduitController {
   constructor(private produitService: ProduitService) {}
 
-  /*@UseGuards(JwtAuthGuard,IsClientGuard)
+
+
   @Get()
   async getAllProduits(): Promise<ProduitEntity[]> {
     return await this.produitService.getProduits();
-  }*/
-  @UseGuards(JwtAuthGuard,IsClientGuard)
+  }
+  
+ // @UseGuards(JwtAuthGuard,IsClientGuard)
   @Patch('command/:idClient/:idProduit')
   async CommanderProduit(
     @Param('idClient', ParseIntPipe) idClient: number,

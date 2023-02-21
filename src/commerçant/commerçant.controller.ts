@@ -105,8 +105,34 @@ export class CommerçantController {
       produit_id,
     );
   }
+
+
+//summary routes
+@Get('/:id/nbcustomer/')
+  async getNbcustomer(@Param('id', ParseIntPipe) id: number){
+  return await this.commercantService.getNbcustomer(id);
+}
+
+@Get('/:id/nbproduct/')
+  async getNbproduct(@Param('id', ParseIntPipe) id: number){
+  return await this.commercantService.getNbProduct(id);
+}
+
+@Get('/:id/earnings/')
+async getEarnings(@Param('id', ParseIntPipe) id: number){
+return await this.commercantService.getEarnings(id);
+}
+
+@Get('/:id/bestproduct/')
+async getbestproduct(@Param('id', ParseIntPipe) id: number){
+return await this.commercantService.getbestproduct(id);
+}
+/// end summary 
+
+
   @Get('/:id/commandes')
   async getcommandes(@Param('id', ParseIntPipe) id: number) {
     return await this.commercantService.getCommandesByCommercantId(id);
   }
+
 }
